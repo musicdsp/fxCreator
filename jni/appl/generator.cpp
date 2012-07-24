@@ -614,3 +614,257 @@ bool ExportWAV(char* filename)
 
 
 
+// pickup/coin
+void GenerateBasicPickUpCoin(void)
+{
+	ResetParams();
+	p_base_freq=0.4f+frnd(0.5f);
+	p_env_attack=0.0f;
+	p_env_sustain=frnd(0.1f);
+	p_env_decay=0.1f+frnd(0.4f);
+	p_env_punch=0.3f+frnd(0.3f);
+	if(rnd(1)) {
+		p_arp_speed=0.5f+frnd(0.2f);
+		p_arp_mod=0.2f+frnd(0.4f);
+	}
+	PlaySample();
+}
+
+
+void GenerateBasicLaserShoot(void)
+{
+	ResetParams();
+	wave_type=rnd(2);
+	if(wave_type==2 && rnd(1)) {
+		wave_type=rnd(1);
+	}
+	p_base_freq=0.5f+frnd(0.5f);
+	p_freq_limit=p_base_freq-0.2f-frnd(0.6f);
+	if(p_freq_limit<0.2f) {
+		p_freq_limit=0.2f;
+	}
+	p_freq_ramp=-0.15f-frnd(0.2f);
+	if(rnd(2)==0) {
+		p_base_freq=0.3f+frnd(0.6f);
+		p_freq_limit=frnd(0.1f);
+		p_freq_ramp=-0.35f-frnd(0.3f);
+	}
+	if(rnd(1)) {
+		p_duty=frnd(0.5f);
+		p_duty_ramp=frnd(0.2f);
+	} else {
+		p_duty=0.4f+frnd(0.5f);
+		p_duty_ramp=-frnd(0.7f);
+	}
+	p_env_attack=0.0f;
+	p_env_sustain=0.1f+frnd(0.2f);
+	p_env_decay=frnd(0.4f);
+	if(rnd(1)) {
+		p_env_punch=frnd(0.3f);
+	}
+	if(rnd(2)==0) {
+		p_pha_offset=frnd(0.2f);
+		p_pha_ramp=-frnd(0.2f);
+	}
+	if(rnd(1)){
+		p_hpf_freq=frnd(0.3f);
+	}
+	PlaySample();
+}
+
+
+void GenerateBasicExplosion(void)
+{
+	ResetParams();
+	wave_type=3;
+	if(rnd(1)) {
+		p_base_freq=0.1f+frnd(0.4f);
+		p_freq_ramp=-0.1f+frnd(0.4f);
+	} else {
+		p_base_freq=0.2f+frnd(0.7f);
+		p_freq_ramp=-0.2f-frnd(0.2f);
+	}
+	p_base_freq*=p_base_freq;
+	if(rnd(4)==0) {
+		p_freq_ramp=0.0f;
+	}
+	if(rnd(2)==0) {
+		p_repeat_speed=0.3f+frnd(0.5f);
+	}
+	p_env_attack=0.0f;
+	p_env_sustain=0.1f+frnd(0.3f);
+	p_env_decay=frnd(0.5f);
+	if(rnd(1)==0) {
+		p_pha_offset=-0.3f+frnd(0.9f);
+		p_pha_ramp=-frnd(0.3f);
+	}
+	p_env_punch=0.2f+frnd(0.6f);
+	if(rnd(1)) {
+		p_vib_strength=frnd(0.7f);
+		p_vib_speed=frnd(0.6f);
+	}
+	if(rnd(2)==0) {
+		p_arp_speed=0.6f+frnd(0.3f);
+		p_arp_mod=0.8f-frnd(1.6f);
+	}
+	PlaySample();
+}
+
+
+void GenerateBasicPowerUp(void)
+{
+	ResetParams();
+	if(rnd(1)) {
+		wave_type=1;
+	} else {
+		p_duty=frnd(0.6f);
+	}
+	if(rnd(1)) {
+		p_base_freq=0.2f+frnd(0.3f);
+		p_freq_ramp=0.1f+frnd(0.4f);
+		p_repeat_speed=0.4f+frnd(0.4f);
+	} else {
+		p_base_freq=0.2f+frnd(0.3f);
+		p_freq_ramp=0.05f+frnd(0.2f);
+		if(rnd(1)) {
+			p_vib_strength=frnd(0.7f);
+			p_vib_speed=frnd(0.6f);
+		}
+	}
+	p_env_attack=0.0f;
+	p_env_sustain=frnd(0.4f);
+	p_env_decay=0.1f+frnd(0.4f);
+	PlaySample();
+}
+
+
+void GenerateBasicHitHurt(void)
+{
+	ResetParams();
+	wave_type=rnd(2);
+	if(wave_type==2) {
+		wave_type=3;
+	}
+	if(wave_type==0) {
+		p_duty=frnd(0.6f);
+	}
+	p_base_freq=0.2f+frnd(0.6f);
+	p_freq_ramp=-0.3f-frnd(0.4f);
+	p_env_attack=0.0f;
+	p_env_sustain=frnd(0.1f);
+	p_env_decay=0.1f+frnd(0.2f);
+	if(rnd(1)) {
+		p_hpf_freq=frnd(0.3f);
+	}
+	PlaySample();
+}
+
+
+void GenerateBasicJump(void)
+{
+	ResetParams();
+	wave_type=0;
+	p_duty=frnd(0.6f);
+	p_base_freq=0.3f+frnd(0.3f);
+	p_freq_ramp=0.1f+frnd(0.2f);
+	p_env_attack=0.0f;
+	p_env_sustain=0.1f+frnd(0.3f);
+	p_env_decay=0.1f+frnd(0.2f);
+	if(rnd(1)) {
+		p_hpf_freq=frnd(0.3f);
+	}
+	if(rnd(1)) {
+		p_lpf_freq=1.0f-frnd(0.6f);
+	}
+	PlaySample();
+}
+
+
+void GenerateBasicBlipSelect(void)
+{
+	ResetParams();
+	wave_type=rnd(1);
+	if(wave_type==0) {
+		p_duty=frnd(0.6f);
+	}
+	p_base_freq=0.2f+frnd(0.4f);
+	p_env_attack=0.0f;
+	p_env_sustain=0.1f+frnd(0.1f);
+	p_env_decay=frnd(0.2f);
+	p_hpf_freq=0.1f;
+	PlaySample();
+}
+
+void GenerateBasicRandom(void)
+{
+	p_base_freq=pow(frnd(2.0f)-1.0f, 2.0f);
+	if(rnd(1)) {
+		p_base_freq=pow(frnd(2.0f)-1.0f, 3.0f)+0.5f;
+	}
+	p_freq_limit=0.0f;
+	p_freq_ramp=pow(frnd(2.0f)-1.0f, 5.0f);
+	if(p_base_freq>0.7f && p_freq_ramp>0.2f) {
+		p_freq_ramp=-p_freq_ramp;
+	}
+	if(p_base_freq<0.2f && p_freq_ramp<-0.05f) {
+		p_freq_ramp=-p_freq_ramp;
+	}
+	p_freq_dramp=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_duty=frnd(2.0f)-1.0f;
+	p_duty_ramp=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_vib_strength=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_vib_speed=frnd(2.0f)-1.0f;
+	p_vib_delay=frnd(2.0f)-1.0f;
+	p_env_attack=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_env_sustain=pow(frnd(2.0f)-1.0f, 2.0f);
+	p_env_decay=frnd(2.0f)-1.0f;
+	p_env_punch=pow(frnd(0.8f), 2.0f);
+	if(p_env_attack+p_env_sustain+p_env_decay<0.2f) {
+		p_env_sustain+=0.2f+frnd(0.3f);
+		p_env_decay+=0.2f+frnd(0.3f);
+	}
+	p_lpf_resonance=frnd(2.0f)-1.0f;
+	p_lpf_freq=1.0f-pow(frnd(1.0f), 3.0f);
+	p_lpf_ramp=pow(frnd(2.0f)-1.0f, 3.0f);
+	if(p_lpf_freq<0.1f && p_lpf_ramp<-0.05f) {
+		p_lpf_ramp=-p_lpf_ramp;
+	}
+	p_hpf_freq=pow(frnd(1.0f), 5.0f);
+	p_hpf_ramp=pow(frnd(2.0f)-1.0f, 5.0f);
+	p_pha_offset=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_pha_ramp=pow(frnd(2.0f)-1.0f, 3.0f);
+	p_repeat_speed=frnd(2.0f)-1.0f;
+	p_arp_speed=frnd(2.0f)-1.0f;
+	p_arp_mod=frnd(2.0f)-1.0f;
+	PlaySample();
+}
+
+
+void GenerateBasicMutate(void)
+{
+	if(rnd(1)) p_base_freq+=frnd(0.1f)-0.05f;
+//		if(rnd(1)) p_freq_limit+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_freq_ramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_freq_dramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_duty+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_duty_ramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_vib_strength+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_vib_speed+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_vib_delay+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_env_attack+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_env_sustain+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_env_decay+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_env_punch+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_lpf_resonance+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_lpf_freq+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_lpf_ramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_hpf_freq+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_hpf_ramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_pha_offset+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_pha_ramp+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_repeat_speed+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_arp_speed+=frnd(0.1f)-0.05f;
+	if(rnd(1)) p_arp_mod+=frnd(0.1f)-0.05f;
+	
+	PlaySample();
+}
