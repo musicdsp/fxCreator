@@ -42,6 +42,8 @@
 #include <ewol/WidgetManager.h>
 #include <ewol/EObject.h>
 
+#include <appl/generator.h>
+
 #undef __class__
 #define __class__	"MainWindows"
 

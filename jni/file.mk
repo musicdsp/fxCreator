@@ -5,7 +5,9 @@
 ###############################################################################
 
 # Globals debug tool:
-FILE_LIST+=		appl/Debug.cpp
+FILE_LIST+=		appl/Debug.cpp \
+				appl/globalMsg.cpp \
+				appl/generator.cpp
 
 # Gui:
 FILE_LIST+=		appl/Gui/MainWindows.cpp
