@@ -343,7 +343,7 @@ void ResetSample(bool restart)
 	}
 }
 
-void PlaySample()
+void generator::PlaySample(void)
 {
 	ResetSample(false);
 	playing_sample=true;
@@ -534,24 +534,24 @@ void SynthSample(int length, float* buffer, FILE* file)
 
 
 //lets use SDL in stead
-static void SDLAudioCallback(int16_t *stream, int32_t len)
+void generator::GenerateAudio(int16_t * bufferInterlace, int32_t nbSample, int32_t nbChannels)
 {
 	if (playing_sample) {
-		float fbuf[len];
-		memset(fbuf, 0, sizeof(int32_t));
-		SynthSample(len, fbuf, NULL);
-		while (len--) {
-			float f = fbuf[len];
+		float fbuf[nbSample];
+		memset(fbuf, 0, sizeof(float));
+		SynthSample(nbSample, fbuf, NULL);
+		while (nbSample--) {
+			float f = fbuf[nbSample];
 			if (f < -1.0) {
 				f = -1.0;
 			}
 			if (f > 1.0) {
 				f = 1.0;
 			}
-			stream[len] = (int16_t)(f * 32767);
+			for (int32_t iii=0; iii<nbChannels; iii++) {
+				bufferInterlace[nbSample*nbChannels+iii] = (int16_t)(f * 32767);
+			}
 		}
-	} else {
-		memset(stream, 0, len*sizeof(int16_t));
 	}
 }
 
@@ -594,7 +594,7 @@ bool ExportWAV(char* filename)
 	file_sampleswritten=0;
 	filesample=0.0f;
 	fileacc=0;
-	PlaySample();
+	generator::PlaySample();
 	while(playing_sample) {
 		SynthSample(256, NULL, foutput);
 	}
@@ -615,7 +615,7 @@ bool ExportWAV(char* filename)
 
 
 // pickup/coin
-void GenerateBasicPickUpCoin(void)
+void generator::GenerateBasicPickUpCoin(void)
 {
 	ResetParams();
 	p_base_freq=0.4f+frnd(0.5f);
@@ -631,7 +631,7 @@ void GenerateBasicPickUpCoin(void)
 }
 
 
-void GenerateBasicLaserShoot(void)
+void generator::GenerateBasicLaserShoot(void)
 {
 	ResetParams();
 	wave_type=rnd(2);
@@ -673,7 +673,7 @@ void GenerateBasicLaserShoot(void)
 }
 
 
-void GenerateBasicExplosion(void)
+void generator::GenerateBasicExplosion(void)
 {
 	ResetParams();
 	wave_type=3;
@@ -711,7 +711,7 @@ void GenerateBasicExplosion(void)
 }
 
 
-void GenerateBasicPowerUp(void)
+void generator::GenerateBasicPowerUp(void)
 {
 	ResetParams();
 	if(rnd(1)) {
@@ -738,7 +738,7 @@ void GenerateBasicPowerUp(void)
 }
 
 
-void GenerateBasicHitHurt(void)
+void generator::GenerateBasicHitHurt(void)
 {
 	ResetParams();
 	wave_type=rnd(2);
@@ -760,7 +760,7 @@ void GenerateBasicHitHurt(void)
 }
 
 
-void GenerateBasicJump(void)
+void generator::GenerateBasicJump(void)
 {
 	ResetParams();
 	wave_type=0;
@@ -780,7 +780,7 @@ void GenerateBasicJump(void)
 }
 
 
-void GenerateBasicBlipSelect(void)
+void generator::GenerateBasicBlipSelect(void)
 {
 	ResetParams();
 	wave_type=rnd(1);
@@ -795,7 +795,7 @@ void GenerateBasicBlipSelect(void)
 	PlaySample();
 }
 
-void GenerateBasicRandom(void)
+void generator::GenerateBasicRandom(void)
 {
 	p_base_freq=pow(frnd(2.0f)-1.0f, 2.0f);
 	if(rnd(1)) {
@@ -840,7 +840,7 @@ void GenerateBasicRandom(void)
 }
 
 
-void GenerateBasicMutate(void)
+void generator::GenerateBasicMutate(void)
 {
 	if(rnd(1)) p_base_freq+=frnd(0.1f)-0.05f;
 //		if(rnd(1)) p_freq_limit+=frnd(0.1f)-0.05f;
@@ -868,3 +868,312 @@ void GenerateBasicMutate(void)
 	
 	PlaySample();
 }
+
+
+
+
+void generator::SetWaveType(int32_t newVal)
+{
+	wave_type = newVal;
+}
+
+int32_t generator::GetWaveType(void)
+{
+	return wave_type;
+}
+
+void generator::SetBaseFreq(float newVal)
+{
+	p_base_freq = newVal;
+}
+
+float generator::GetBaseFreq(void)
+{
+	return p_base_freq;
+}
+
+void generator::SetFreqLimit(float newVal)
+{
+	p_freq_limit = newVal;
+}
+
+float generator::GetFreqLimit(void)
+{
+	return p_freq_limit;
+}
+
+
+void generator::SetFreqRamp(float newVal)
+{
+	p_freq_ramp = newVal;
+}
+
+float generator::GetFreqRamp(void)
+{
+	return p_freq_ramp;
+}
+
+
+void generator::SetFreqDRamp(float newVal)
+{
+	p_freq_dramp = newVal;
+}
+
+float generator::GetFreqDRamp(void)
+{
+	return p_freq_dramp;
+}
+
+
+void generator::SetDuty(float newVal)
+{
+	p_duty = newVal;
+}
+
+float generator::GetDuty(void)
+{
+	return p_duty;
+}
+
+
+void generator::SetDutyRamp(float newVal)
+{
+	p_duty_ramp = newVal;
+}
+
+float generator::GetDutyRamp(void)
+{
+	return p_duty_ramp;
+}
+
+
+
+void generator::SetVibStrength(float newVal)
+{
+	p_vib_strength = newVal;
+}
+
+float generator::GetVibStrength(void)
+{
+	return p_vib_strength;
+}
+
+
+void generator::SetVibSpeed(float newVal)
+{
+	p_vib_speed = newVal;
+}
+
+float generator::GetVibSpeed(void)
+{
+	return p_vib_speed;
+}
+
+
+void generator::SetVibDelay(float newVal)
+{
+	p_vib_delay = newVal;
+}
+
+float generator::GetVibDelay(void)
+{
+	return p_vib_delay;
+}
+
+
+
+void generator::SetEnvAttack(float newVal)
+{
+	p_env_attack = newVal;
+}
+
+float generator::GetEnvAttack(void)
+{
+	return p_env_attack;
+}
+
+
+void generator::SetEnvSustain(float newVal)
+{
+	p_env_sustain = newVal;
+}
+
+float generator::GetEnvSustain(void)
+{
+	return p_env_sustain;
+}
+
+
+void generator::SetEnvDecay(float newVal)
+{
+	p_env_decay = newVal;
+}
+
+float generator::GetEnvDecay(void)
+{
+	return p_env_decay;
+}
+
+
+void generator::SetEnvPunch(float newVal)
+{
+	p_env_punch = newVal;
+}
+
+float generator::GetEnvPunch(void)
+{
+	return p_env_punch;
+}
+
+
+
+void generator::SetFilterOn(bool newVal)
+{
+	filter_on = newVal;
+}
+
+bool generator::GetFilterOn(void)
+{
+	return filter_on;
+}
+
+
+void generator::SetLPFResonance(float newVal)
+{
+	p_lpf_resonance = newVal;
+}
+
+float generator::GetLPFResonance(void)
+{
+	return p_lpf_resonance;
+}
+
+
+void generator::SetLPFFreq(float newVal)
+{
+	p_lpf_freq = newVal;
+}
+
+float generator::GetLPFFreq(void)
+{
+	return p_lpf_freq;
+}
+
+
+void generator::SetLPFRamp(float newVal)
+{
+	p_lpf_ramp = newVal;
+}
+
+float generator::GetLPFRamp(void)
+{
+	return p_lpf_ramp;
+}
+
+
+void generator::SetHPFFreq(float newVal)
+{
+	p_hpf_freq = newVal;
+}
+
+float generator::GetHPFFreq(void)
+{
+	return p_hpf_freq;
+}
+
+
+void generator::SetHPFRamp(float newVal)
+{
+	p_hpf_ramp = newVal;
+}
+
+float generator::GetHPFRamp(void)
+{
+	return p_hpf_ramp;
+}
+
+
+
+void generator::SetPhaseOffset(float newVal)
+{
+	p_pha_offset = newVal;
+}
+
+float generator::GetPhaseOffset(void)
+{
+	return p_pha_offset;
+}
+
+
+void generator::SetPhaseRamp(float newVal)
+{
+	p_pha_ramp = newVal;
+}
+
+float generator::GetPhaseRamp(void)
+{
+	return p_pha_ramp;
+}
+
+
+
+void generator::SetRepeatSpeed(float newVal)
+{
+	p_repeat_speed = newVal;
+}
+
+float generator::GetRepeatSpeed(void)
+{
+	return p_repeat_speed;
+}
+
+
+
+void generator::SetArpSpeed(float newVal)
+{
+	p_arp_speed = newVal;
+}
+
+float generator::GetArpSpeed(void)
+{
+	return p_arp_speed;
+}
+
+
+void generator::SetArpMod(float newVal)
+{
+	p_arp_mod = newVal;
+}
+
+float generator::GetArpMod(void)
+{
+	return p_arp_mod;
+}
+
+
+void generator::SetMasterVolume(float newVal)
+{
+	master_vol = newVal;
+}
+
+float generator::GetMasterVolume(void)
+{
+	return master_vol;
+}
+
+
+void generator::SetSoundVolume(float newVal)
+{
+	sound_vol = newVal;
+}
+
+float generator::GetSoundVolume(void)
+{
+	return sound_vol;
+}
+
+
+
+
+
+

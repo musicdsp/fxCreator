@@ -34,6 +34,8 @@
 #include <Gui/MainWindows.h>
 #include <unistd.h>
 #include <globalMsg.h>
+#include <ewol/Audio/audio.h>
+#include <appl/generator.h>
 
 MainWindows * basicWindows = NULL;
 
@@ -76,7 +78,11 @@ void APP_Init(void)
 	}
 	// create the specific windows
 	ewol::DisplayWindows(basicWindows);
-	
+	// set basic random sound
+	generator::GenerateBasicRandom();
+	// initialize output audio :
+	ewol::audio::Init();
+	ewol::audio::AddCallbackOutput(&generator::GenerateAudio);
 	// add files
 	APPL_INFO("show list of files : ");
 	

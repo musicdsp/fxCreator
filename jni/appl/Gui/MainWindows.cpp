@@ -48,6 +48,18 @@
 #undef __class__
 #define __class__	"MainWindows"
 
+static const char* const l_applEventPlay = "appl-play";
+static const char* const l_applEventBlit = "appl-Blit";
+static const char* const l_applEventJump = "appl-Jump";
+static const char* const l_applEventHit = "appl-Hit";
+static const char* const l_applEventPowerUp = "appl-PowerUp";
+static const char* const l_applEventExplosion = "appl-Explosion";
+static const char* const l_applEventLaser = "appl-Laser";
+static const char* const l_applEventPick = "appl-Pick";
+static const char* const l_applEventRandom = "appl-Random";
+static const char* const l_applEventMutant = "appl-Mutant";
+
+
 MainWindows::MainWindows(void)
 {
 	APPL_DEBUG("CREATE WINDOWS ... ");
@@ -69,25 +81,42 @@ MainWindows::MainWindows(void)
 			
 			mySizerVert2 = new ewol::SizerVert();
 			mySizerHori->SubWidgetAdd(mySizerVert2);
+				myButton = new ewol::Button("Play");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventPlay);
+				mySizerVert2->SubWidgetAdd(myButton);
+				
 				mySpacer = new ewol::Spacer();
 				mySpacer->SetExpendY(true);
 				mySizerVert2->SubWidgetAdd(mySpacer);
 				
-				myButton = new ewol::Button("BLIP/SELECT");
+				myButton = new ewol::Button("Blip/Select");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventBlit);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("JUMP");
+				myButton = new ewol::Button("Jump");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventJump);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("HIT/HURT");
+				myButton = new ewol::Button("Hit/Hurt");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventHit);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("POWER UP");
+				myButton = new ewol::Button("Power up");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventPowerUp);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("EXPLOSION");
+				myButton = new ewol::Button("Explosion");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventExplosion);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("LASER/SHOOT");
+				myButton = new ewol::Button("Laser/Shoot");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventLaser);
 				mySizerVert2->SubWidgetAdd(myButton);
-				myButton = new ewol::Button("PICKUP/COIN");
+				myButton = new ewol::Button("Pick up/Coin");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventPick);
 				mySizerVert2->SubWidgetAdd(myButton);
 				
+				myButton = new ewol::Button("Random");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventRandom);
+				mySizerVert2->SubWidgetAdd(myButton);
+				myButton = new ewol::Button("Mutant");
+				myButton->RegisterOnEvent(this, ewolEventButtonPressed,  l_applEventMutant);
+				mySizerVert2->SubWidgetAdd(myButton);
 				
 			mySizerVert2 = new ewol::SizerVert();
 			mySizerHori->SubWidgetAdd(mySizerVert2);
@@ -98,37 +127,67 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("HP FILTER CUTOFF SWEEP");
+					myLabel = new ewol::Label("HP filter cutoff sweep");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("HP FILTER CUTOFF");
+					myLabel = new ewol::Label("HP filter cutoff");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 					
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("LP FILTER RESONANCE");
+					myLabel = new ewol::Label("LP filter resonance");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 					
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("LP FILTER CUTOFF SWEEP");
+					myLabel = new ewol::Label("LP filter cutoff sweep");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 					
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("LP FILTER CUTOFF");
+					myLabel = new ewol::Label("LP filter cutoff");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 					
 				mySpacer = new ewol::Spacer();
@@ -137,16 +196,28 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("PHASER SWEEP");
+					myLabel = new ewol::Label("Phaser sweep");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("PHASER OFFSET");
+					myLabel = new ewol::Label("Phaser offset");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				
@@ -156,9 +227,15 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("REPEAT SPEED");
+					myLabel = new ewol::Label("Repeat speed");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				
@@ -168,16 +245,28 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("DUTY SWEEP");
+					myLabel = new ewol::Label("Duty sweep");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("SQUARE DUTY");
+					myLabel = new ewol::Label("Square duty");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySpacer = new ewol::Spacer();
@@ -186,16 +275,28 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("CHANGE SPEED");
+					myLabel = new ewol::Label("Change speed");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("CHANGE AMOUNT");
+					myLabel = new ewol::Label("Change amount");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 	
 	
@@ -206,44 +307,80 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("VIBRATO SPEED");
+					myLabel = new ewol::Label("Vibrato speed");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("VIBRATO DEPTH");
+					myLabel = new ewol::Label("Vibrato depth");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("DELTA SLIDE");
+					myLabel = new ewol::Label("Delta slide");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("SLIDE");
+					myLabel = new ewol::Label("Slide");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("MIN FREQUENCY");
+					myLabel = new ewol::Label("Min frequency");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("START FREQUENCY");
+					myLabel = new ewol::Label("Start frequency");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySpacer = new ewol::Spacer();
@@ -252,30 +389,54 @@ MainWindows::MainWindows(void)
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("DECAY TIME");
+					myLabel = new ewol::Label("Decay time");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("SUSTAIN PUNCH");
+					myLabel = new ewol::Label("Sustain punch");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("SUSTAIN TIME");
+					myLabel = new ewol::Label("Sustain time");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 				mySizerHori2 = new ewol::SizerHori();
 				mySizerVert2->SubWidgetAdd(mySizerHori2);
-					myLabel = new ewol::Label("ATTACK TIME");
+					myLabel = new ewol::Label("Attack time");
 					mySizerHori2->SubWidgetAdd(myLabel);
+					mySpacer = new ewol::Spacer();
+					mySpacer->SetExpendX(true);
+					mySizerHori2->SubWidgetAdd(mySpacer);
 					mySlider = new ewol::Slider();
+					mySlider->SetMinSize(300);
+					mySlider->SetMin(0);
+					mySlider->SetMax(100);
 					mySizerHori2->SubWidgetAdd(mySlider);
 				
 		mySizerHori = new ewol::SizerHori();
@@ -293,11 +454,6 @@ MainWindows::MainWindows(void)
 				(void)myMenu->Add(idMenuFile, "Save",         "icon/Save.svg", ednMsgGuiSave, "current");
 				(void)myMenu->Add(idMenuFile, "Save As ...",  "", ednMsgGuiSaveAs);
 				*/
-			
-			m_widgetLabelFileName = new ewol::Label("FileName");
-			m_widgetLabelFileName->SetExpendX(true);
-			m_widgetLabelFileName->SetFillY(true);
-			mySizerHori->SubWidgetAdd(m_widgetLabelFileName);
 		
 	// Generic event ...
 	//RegisterMultiCast(ednMsgGuiSaveAs);
@@ -324,7 +480,27 @@ const char *const ednEventPopUpFileSaveAs   = "edn-mainWindows-saveAsSelected";
 void MainWindows::OnReceiveMessage(ewol::EObject * CallerObject, const char * eventId, etk::UString data)
 {
 	ewol::Windows::OnReceiveMessage(CallerObject, eventId, data);
-	
+	if (eventId == l_applEventPlay) {
+		generator::PlaySample();
+	} else if (eventId == l_applEventBlit) {
+		generator::GenerateBasicBlipSelect();
+	} else if (eventId == l_applEventJump) {
+		generator::GenerateBasicJump();
+	} else if (eventId == l_applEventHit) {
+		generator::GenerateBasicHitHurt();
+	} else if (eventId == l_applEventPowerUp) {
+		generator::GenerateBasicPowerUp();
+	} else if (eventId == l_applEventExplosion) {
+		generator::GenerateBasicExplosion();
+	} else if (eventId == l_applEventLaser) {
+		generator::GenerateBasicLaserShoot();
+	} else if (eventId == l_applEventPick) {
+		generator::GenerateBasicPickUpCoin();
+	} else if (eventId == l_applEventRandom) {
+		generator::GenerateBasicRandom();
+	} else if (eventId == l_applEventMutant) {
+		generator::GenerateBasicMutate();
+	}
 	return;
 }
 
